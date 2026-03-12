@@ -20,10 +20,6 @@ def print_board(board):
     """Prints a nice string representation of a Connect Four board."""
     print(stringify_board(board))
 
-
-def check_win_conditions(board):
-    raise NotImplementedError("fill this in!")
-
 def column_is_full(board, column):
     """
     Given a column number and board list, return true if the column is full (if the entire column is all 1s/2s).
@@ -58,8 +54,6 @@ def get_open_slot_index(board, column):
     
     current_col_pos = column
 
-    # while the NEXT index is within range and next index is 0
-
     while current_col_pos + 7 <= 41 and board[current_col_pos + 7] == 0:
         current_col_pos += 7
 
@@ -73,3 +67,79 @@ def play_move(board, player, column):
         return board
     else:
         raise Exception("Column is full!")
+
+def check_win_conditions(board):
+    raise NotImplementedError("fill this in!")
+
+def check_col_conditions(board, player):
+    """
+    Given a board and a player, check each col to see if a player
+    has 4 checkers in a col.
+
+    Args: 
+        board (list[int]): list of board positions with 0s, 1s, 2s
+        player (int): represents the player (1 or 2)
+    Return:
+        True or False if player has 4 checkers in a column
+    """
+    init_pos_1, init_pos_2, init_pos_3, init_pos_4 = 14, 21, 28, 35
+    player_has_won = False
+
+    for i in range(7):
+        base_1 = init_pos_1 + 1 * i
+        base_2 = init_pos_2 + 1 * i
+        base_3 = init_pos_3 + 1 * i
+        base_4 = init_pos_4 + 1 * i
+
+        for j in range(3):
+            curr_pos_1 = base_1 - 7 * j
+            curr_pos_2 = base_2 - 7 * j
+            curr_pos_3 = base_3 - 7 * j
+            curr_pos_4 = base_4 - 7 * j
+            if (player == board[curr_pos_1] and
+                board[curr_pos_1] == board[curr_pos_2] and  
+                board[curr_pos_2] == board[curr_pos_3] and
+                board[curr_pos_3] == board[curr_pos_4]):
+                player_has_won = True
+                break
+        if player_has_won:
+            break
+    return player_has_won
+
+def check_row_conditions(board, player):
+    """
+    Given a board and a player, check each row to see if a player
+    has 4 checkers in a row.
+
+    Args: 
+        board (list[int]): list of board positions with 0s, 1s, 2s
+        player (int): represents the player (1 or 2)
+    Return:
+        True or False if player has 4 checkers in a row
+    """
+    init_pos_1, init_pos_2, init_pos_3, init_pos_4 = 0, 1, 2, 3
+    player_has_won = False
+
+    for i in range(6):
+        base_1 = init_pos_1 + 7 * i
+        base_2 = init_pos_2 + 7 * i
+        base_3 = init_pos_3 + 7 * i
+        base_4 = init_pos_4 + 7 * i
+
+        for j in range(4):
+            curr_pos_1 = base_1 + 1 * j
+            curr_pos_2 = base_2 + 1 * j
+            curr_pos_3 = base_3 + 1 * j
+            curr_pos_4 = base_4 + 1 * j
+            # print(curr_pos_1, curr_pos_2, curr_pos_3, curr_pos_4)
+            if (player == board[curr_pos_1] and
+                board[curr_pos_1] == board[curr_pos_2] and  
+                board[curr_pos_2] == board[curr_pos_3] and
+                board[curr_pos_3] == board[curr_pos_4]):
+                player_has_won = True
+                break
+        if player_has_won:
+            break
+    return player_has_won
+
+
