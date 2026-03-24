@@ -20,46 +20,37 @@ def print_board(board):
     """Prints a nice string representation of a Connect Four board."""
     print(stringify_board(board))
 
-def column_is_full(board, column):
-    """
-    Given a column number and board list, return true if the column is full (if the entire column is all 1s/2s).
-    Assumes that the column obeys laws of gravity (that all non-zero items in a column are pushed to bottom of the column)
-
-    Args:
-        board (list[int]): list of board positions with 0s, 1s, and 2s integers
-        column (int): integer that represents the column to drop the game piece (0-6)
-    Return:
-        True if the the selected column is nonzero, False if not.
-    """
-
-    for i in range(column, 42, 7):
-        if board[i] == 0:
-            return False
-    return True
 
 def get_open_slot_index(board, column):
     """
-    Given a column number and board list, return None if the column selected is full. Else, return the topmost position to
-    drop a game piece into.
+    Given a column and a board, return the position a game piece should fall into after being placed.
 
     Args:
-        board (list[int]): list of board positions with 0s, 1s, and 2s integers
+        board (list[int]): a list of all positions in a 6 by 7 board, with all indexes having the value 0, 1, or 2.
         column (int): integer that represents the column to drop the game piece (0-6)
     Return:
-        None if board is full, and int position if not
+        None if column is full. int representing the dropped game piece if the column is not full
     """
+    current_col_pos = column + 35
 
-    if column_is_full(board, column):
-        return None
-    
-    current_col_pos = column
+    while current_col_pos >= column:
+        if board[current_col_pos] == 0:
+            return current_col_pos
+        current_col_pos -= 7
 
-    while current_col_pos + 7 <= 41 and board[current_col_pos + 7] == 0:
-        current_col_pos += 7
-
-    return current_col_pos
+    return None
 
 def play_move(board, player, column):
+    """
+    Given a column, board, and player, return updated board after player has dropped a game piece.
+
+    Args:
+        board (list[int]): a list of all positions in a 6 by 7 board, with all indexes having the value 0, 1, or 2.
+        column (int): integer that represents the column to drop the game piece (0-6)
+        player (int): an integer represented the player dropping a game piece (1-2)
+    Return:
+        board list[int]) representing the updated board after player dropped a game piece
+    """
     next_move_pos = get_open_slot_index(board, column)
 
     if next_move_pos is not None:
@@ -70,6 +61,8 @@ def play_move(board, player, column):
 
 def check_win_conditions(board):
     raise NotImplementedError("fill this in!")
+
+# def check_diagonal_conditions(board, player):
 
 def check_col_conditions(board, player):
     """
