@@ -59,9 +59,6 @@ def play_move(board, player, column):
     else:
         raise Exception("Column is full!")
 
-def check_win_conditions(board):
-    raise NotImplementedError("fill this in!")
-
 def check_diagonal_conditions(board, player):
     """
     Given a board and a player, check each possible diagonal to see if a player
@@ -195,4 +192,16 @@ def check_row_conditions(board, player):
             break
     return player_has_won
 
+def check_win_conditions(board):
+    player_1_won = check_row_conditions(board, 1) or check_col_conditions(board, 1) or check_diagonal_conditions(board, 1)
+    player_2_won = check_row_conditions(board, 2) or check_col_conditions(board, 2) or check_diagonal_conditions(board, 2)
+    draw = player_1_won and player_2_won
 
+    if draw:
+        raise Exception("Impossible Board, both players cannot win.")
+    elif player_1_won:
+        return 1
+    elif player_2_won:
+        return 2
+    else:
+        return 0
