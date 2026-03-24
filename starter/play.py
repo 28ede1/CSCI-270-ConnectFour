@@ -1,7 +1,7 @@
 from connectfour import check_win_conditions
 from connectfour import play_move
 from connectfour import print_board
-from players import random_player_fn
+from players import random_player_fn, initialize_my_player_fn
 import sys
 import time
 from tqdm import tqdm
@@ -24,7 +24,7 @@ def play_game(player1_fn, player2_fn, min_delay=0.2, visualize=True):
             print(f"\nplayer {current_player} is thinking...")
         player_fn = player1_fn if current_player == 1 else player2_fn
         start = time.time()
-        col = player_fn(board, current_player)
+        col = player_fn(board, current_player) # optimal move should be replaced here
         if visualize:
             elapsed = time.time() - start
             if elapsed < min_delay:
@@ -64,4 +64,7 @@ def play_tournament(player1_fn, player2_fn, num_rounds):
 
 
 if __name__ == "__main__":
-    play_game(random_player_fn, random_player_fn)
+    ai_player_fn = initialize_my_player_fn()
+    # play_game(random_player_fn, random_player_fn)
+
+    play_game(ai_player_fn, ai_player_fn)

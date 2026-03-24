@@ -193,6 +193,16 @@ def check_row_conditions(board, player):
     return player_has_won
 
 def check_win_conditions(board):
+    """
+    Given a board and a player, check rows/cols/diagonals to see if a player
+    has 4 checkers in a row.
+
+    Args: 
+        board (list[int]): list of board positions with 0s, 1s, 2s
+        player (int): represents the player (1 or 2)
+    Return:
+        True or False if player has 4 checkers in a row/col/diagonal
+    """
     player_1_won = check_row_conditions(board, 1) or check_col_conditions(board, 1) or check_diagonal_conditions(board, 1)
     player_2_won = check_row_conditions(board, 2) or check_col_conditions(board, 2) or check_diagonal_conditions(board, 2)
     draw = player_1_won and player_2_won
@@ -205,3 +215,23 @@ def check_win_conditions(board):
         return 2
     else:
         return 0
+
+def game_is_over(board):
+    """
+    Given a board and a player, check to see if either play won, or if the board is full
+
+    Args: 
+        board (list[int]): list of board positions with 0s, 1s, 2s
+        player (int): represents the player (1 or 2)
+    Return:
+        True or False if there is a winner or the board is full
+    """
+    player_1_won = check_row_conditions(board, 1) or check_col_conditions(board, 1) or check_diagonal_conditions(board, 1)
+    player_2_won = check_row_conditions(board, 2) or check_col_conditions(board, 2) or check_diagonal_conditions(board, 2)
+    draw = player_1_won and player_2_won
+
+    board_is_full = 0 not in {board[i] for i in range(7)} # assumes gravity is obeyed and game pieces fill columns from bottom to top
+    if draw or player_1_won or player_2_won or board_is_full:
+        return True
+    else:
+        return False
