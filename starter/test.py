@@ -74,6 +74,32 @@ test_board_8 = [
     2,1,2,1,2,1,2
 ]
 
+test_board_9 = [
+    0,0,0,0,0,0,0,
+    0,0,0,1,0,0,0,
+    0,0,1,2,0,0,0,
+    0,1,2,2,0,0,0,
+    1,2,2,2,0,0,0,
+    2,1,1,1,0,0,0
+]   
+
+test_board_10 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    2,1,0,0,0,0,0,
+    2,2,1,0,0,0,0,
+    2,2,2,1,0,0,0,
+    1,1,1,2,0,0,0
+]
+
+test_board_11 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,2,0,
+    0,0,1,1,0,1,0,
+    0,1,2,1,1,2,0,
+    1,1,1,2,2,1,0,
+    2,1,2,1,1,2,1
+]
 
 def test_get_open_slot_index():
 
@@ -136,6 +162,20 @@ def test_row_win_conditions():
     assert check_row_conditions(test_board_8, 2) == False
     assert check_row_conditions(test_board_8, 1) == False
 
+def test_diagonal_win_conditions():
+
+    assert check_diagonal_conditions(test_board_9, 1) == True
+    assert check_diagonal_conditions(test_board_9, 2) == True
+
+    assert check_diagonal_conditions(test_board_10, 1) == False
+    assert check_diagonal_conditions(test_board_10, 2) == True
+
+    assert check_diagonal_conditions(test_board_7, 1) == False
+    assert check_diagonal_conditions(test_board_7, 2) == False
+
+    assert check_diagonal_conditions(test_board_11, 1) == True
+    assert check_diagonal_conditions(test_board_11, 2) == False
+
 
 if __name__ == "__main__":
     test_get_open_slot_index()
@@ -149,3 +189,7 @@ if __name__ == "__main__":
 
     test_row_win_conditions()
     print('row_win_conditions functions correctly! ✅')
+
+    test_diagonal_win_conditions()
+    print('diagonal_win_conditions functions correctly! ✅')
+

@@ -62,7 +62,67 @@ def play_move(board, player, column):
 def check_win_conditions(board):
     raise NotImplementedError("fill this in!")
 
-# def check_diagonal_conditions(board, player):
+def check_diagonal_conditions(board, player):
+    """
+    Given a board and a player, check each possible diagonal to see if a player
+    has 4 checkers in a diagonal (forward learning or backward learning).
+
+    Args: 
+        board (list[int]): list of board positions with 0s, 1s, 2s
+        player (int): represents the player (1 or 2)
+    Return:
+        True or False if player has 4 checkers in a diagonal
+    """
+
+    # check \ direction
+    p1 = 14
+    p2 = 22
+    p3 = 30
+    p4 = 38
+
+    while p1 >= 0:
+        cur1 = p1
+        cur2 = p2
+        cur3 = p3
+        cur4 = p4
+
+        for i in range(4):
+            if board[cur1] == board[cur2] and board[cur2] == board[cur3] and board[cur3] == board[cur4] and board[cur4] == player:
+                return True
+            cur1 += 1
+            cur2 += 1
+            cur3 += 1
+            cur4 += 1
+            
+        p1 -= 7
+        p2 -= 7
+        p3 -= 7
+        p4 -= 7
+
+    # check / direction
+    p1 = 20
+    p2 = 26
+    p3 = 32
+    p4 = 38
+
+    while p1 >= 0:
+        cur1 = p1
+        cur2 = p2
+        cur3 = p3
+        cur4 = p4
+        for i in range(4):
+            if board[cur1] == board[cur2] and board[cur2] == board[cur3] and board[cur3] == board[cur4] and board[cur4] == player:
+                return True
+            cur1 -= 1
+            cur2 -= 1
+            cur3 -= 1
+            cur4 -= 1
+            
+        p1 -= 7
+        p2 -= 7
+        p3 -= 7
+        p4 -= 7
+    return False
 
 def check_col_conditions(board, player):
     """
