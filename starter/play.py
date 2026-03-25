@@ -66,6 +66,6 @@ def play_tournament(player1_fn, player2_fn, num_rounds):
 if __name__ == "__main__":
     # play_game(random_player_fn, random_player_fn)
     ai_player_fn = initialize_my_player_fn()
-    play_game(human_player_fn, ai_player_fn)
+    play_game(ai_player_fn, ai_player_fn)
 
-    # play_tournament(ai_player_fn, human_player_fn, 100)
+    # play_tournament(ai_player_fn, random_player_fn, 100)
