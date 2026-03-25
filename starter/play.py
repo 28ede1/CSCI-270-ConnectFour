@@ -1,7 +1,7 @@
 from connectfour import check_win_conditions
 from connectfour import play_move
 from connectfour import print_board
-from players import random_player_fn, initialize_my_player_fn
+from players import random_player_fn, initialize_my_player_fn, human_player_fn
 import sys
 import time
 from tqdm import tqdm
@@ -64,7 +64,7 @@ def play_tournament(player1_fn, player2_fn, num_rounds):
 
 
 if __name__ == "__main__":
-    ai_player_fn = initialize_my_player_fn()
     # play_game(random_player_fn, random_player_fn)
 
-    play_game(ai_player_fn, ai_player_fn)
+    ai_player_fn = initialize_my_player_fn()
+    play_game(human_player_fn, ai_player_fn)
