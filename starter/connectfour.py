@@ -48,11 +48,14 @@ def play_move(board, player, column):
         board (list[int]): a list of all positions in a 6 by 7 board, with all indexes having the value 0, 1, or 2.
         column (int): integer that represents the column to drop the game piece (0-6)
         player (int): an integer represented the player dropping a game piece (1-2)
+    Return:
+        board list[int]) representing the updated board after player dropped a game piece
     """
     next_move_pos = get_open_slot_index(board, column)
 
     if next_move_pos is not None:
         board[next_move_pos] = player
+        return board
     else:
         raise Exception("Column is full!")
 

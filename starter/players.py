@@ -53,7 +53,7 @@ def evaluation_function(board, player):
     """
     game_win_result = check_win_conditions(board)
     board_is_full = 0 not in {board[i] for i in range(7)} # assumes gravity rules for dropping game pieces are obeyed
-
+    opposing_player = 2 if player == 1 else 1
     if game_win_result == player:
         return 1000000000
     elif game_win_result != 0:
@@ -77,8 +77,47 @@ def evaluation_function(board, player):
 
     board_score += center_count
 
+    # consider the number of columns where you have 3 of the same color as player in a column
+    # a stronger weighting againt player is used so that the AI can be more 'defensively'
+    # as in, care more about preventing states where the opposing player has n in row in a column
+    board_score += count_n_in_a_row_threats(board, player, 3) * 6
+    board_score -= count_n_in_a_row_threats(board, opposing_player, 3) * 6.6
+
+    # consider the number of columns where you have 2 in a column (less threatening then 3 in a row)
+
+    board_score += count_n_in_a_row_threats(board, player, 2) * 2
+    board_score -= count_n_in_a_row_threats(board, opposing_player, 2) * 2.6
+
+    # consider just having 1 in a row (even less threatening)
+
+    board_score += count_n_in_a_row_threats(board, player, 1) * 2
+    board_score -= count_n_in_a_row_threats(board, opposing_player, 1) * 2.6
 
     return board_score
+
+def count_n_in_a_row_threats(board, player, threat_chain_count):
+    column_start_index = 0
+    n_way_count = 0
+    for i in range(7):
+        current_index = column_start_index
+
+        if board[current_index] != 0:
+            column_start_index += 1
+            continue
+
+        chain_count = 0
+        while current_index <= 41 and board[current_index] == 0:
+            current_index += 7
+
+        while current_index <= 41 and board[current_index] == player:
+            chain_count += 1
+            current_index += 7
+            
+        if chain_count == threat_chain_count:
+            n_way_count += 1
+
+        column_start_index += 1
+    return n_way_count
 
 def minimax(board, eval_fn, whose_turn, who_am_i, num_plys):
 
@@ -160,7 +199,6 @@ def initialize_my_player_fn(num_plys=4):
                 best_move = move
 
             board[move_slot_index] = 0
-        
         return best_move
     
     return my_player_fn

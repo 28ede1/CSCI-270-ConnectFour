@@ -1,4 +1,5 @@
 from connectfour import *
+from players import count_n_in_a_row_threats
 
 # test args
 
@@ -101,6 +102,87 @@ test_board_11 = [
     2,1,2,1,1,2,1
 ]
 
+test_board_12 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,1,0,0,0,
+    0,0,0,1,0,0,0,
+    0,0,0,1,0,0,0,
+    0,2,0,2,0,0,0
+]
+
+test_board_13 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,1,0,1,0,0,0,
+    0,1,0,1,0,0,0,
+    0,1,0,1,0,0,0,
+    2,2,2,2,0,0,0
+]
+
+test_board_14 = [
+    0,0,0,0,0,0,0,
+    0,0,2,0,0,0,0,
+    0,1,1,1,0,0,0,
+    0,1,1,1,0,0,0,
+    0,1,1,1,0,0,0,
+    2,2,2,2,0,0,0
+]
+
+test_board_15 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,1,1,1,0,0,0,
+    0,1,1,1,0,0,0,
+    0,1,1,1,0,0,0,
+    2,2,2,2,0,0,0
+]
+
+test_board_16 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,2,0,0,0,0,0,
+    0,2,0,2,0,0,0,
+    1,2,1,2,0,0,0,
+    1,1,1,2,0,0,1
+]
+
+test_board_17 = [
+    0,0,0,1,0,0,0,
+    0,0,0,1,0,0,0,
+    0,0,0,1,0,0,0,
+    0,0,0,2,0,0,0,
+    0,0,0,2,0,0,0,
+    2,2,0,2,0,0,0
+]
+
+test_board_18 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,1,0,2,0,0,0,
+    0,1,0,2,0,0,0,
+    2,2,1,1,0,0,0
+]
+
+test_board_19 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,1,0,0,0,
+    0,0,0,1,0,0,0,
+    2,2,0,2,0,0,0
+]
+
+test_board_20 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,1,0,0,0,0,0,
+    0,1,0,1,0,0,0,
+    0,1,0,1,0,0,0,
+    2,2,0,2,0,0,0
+]
+
 def test_get_open_slot_index():
 
     # Test that for an empty board, all dropped game pieces should end up on the last row
@@ -177,6 +259,49 @@ def test_diagonal_win_conditions():
     assert check_diagonal_conditions(test_board_11, 2) == False
 
 
+
+def test_three_way_threat_count():
+    assert count_n_in_a_row_threats(test_board_12, 2, 3) == 0
+    assert count_n_in_a_row_threats(test_board_12, 1, 3) == 1
+    assert count_n_in_a_row_threats(test_board_3, 1, 3) == 0
+    assert count_n_in_a_row_threats(test_board_13, 1, 3) == 2
+    assert count_n_in_a_row_threats(test_board_14, 1, 3) == 2
+    assert count_n_in_a_row_threats(test_board_15, 1, 3) == 3
+    assert count_n_in_a_row_threats(test_board_16, 2, 3) == 2
+    assert count_n_in_a_row_threats(test_board_16, 1, 3) == 0
+    assert count_n_in_a_row_threats(test_board_17, 1, 3) == 0
+    assert count_n_in_a_row_threats(test_board_18, 1, 3) == 0
+
+def test_two_way_threat_count():
+    assert count_n_in_a_row_threats(test_board_12, 2, 2) == 0
+    assert count_n_in_a_row_threats(test_board_12, 1, 2) == 0
+    assert count_n_in_a_row_threats(test_board_3, 1, 2) == 0
+    assert count_n_in_a_row_threats(test_board_13, 1, 2) == 0
+    assert count_n_in_a_row_threats(test_board_14, 1, 2) == 0
+    assert count_n_in_a_row_threats(test_board_15, 1, 2) == 0
+    assert count_n_in_a_row_threats(test_board_16, 1, 2) == 2
+    assert count_n_in_a_row_threats(test_board_16, 2, 2) == 0
+    assert count_n_in_a_row_threats(test_board_17, 1, 2) == 0
+    assert count_n_in_a_row_threats(test_board_18, 1, 2) == 1
+    assert count_n_in_a_row_threats(test_board_18, 2, 2) == 1
+    assert count_n_in_a_row_threats(test_board_19, 1, 2) == 1
+    assert count_n_in_a_row_threats(test_board_20, 1, 2) == 1
+
+def test_one_way_threat_count():
+    assert count_n_in_a_row_threats(test_board_12, 2, 1) == 1
+    assert count_n_in_a_row_threats(test_board_12, 1, 1) == 0
+    assert count_n_in_a_row_threats(test_board_3, 1, 1) == 3
+    assert count_n_in_a_row_threats(test_board_13, 1, 1) == 0
+    assert count_n_in_a_row_threats(test_board_14, 1, 1) == 0
+    assert count_n_in_a_row_threats(test_board_15, 2, 1) == 1
+    assert count_n_in_a_row_threats(test_board_16, 1, 1) == 1
+    assert count_n_in_a_row_threats(test_board_16, 2, 1) == 0
+    assert count_n_in_a_row_threats(test_board_17, 2, 1) == 2
+    assert count_n_in_a_row_threats(test_board_18, 1, 1) == 1
+    assert count_n_in_a_row_threats(test_board_18, 2, 1) == 1
+    assert count_n_in_a_row_threats(test_board_19, 2, 1) == 2
+    assert count_n_in_a_row_threats(test_board_20, 1, 1) == 0
+
 if __name__ == "__main__":
     test_get_open_slot_index()
     print('get_open_slot_index functions correctly! ✅')
@@ -192,4 +317,13 @@ if __name__ == "__main__":
 
     test_diagonal_win_conditions()
     print('diagonal_win_conditions functions correctly! ✅')
+
+    test_three_way_threat_count()
+    print('count_n_in_a_row_threats functions correctly! (three-way threats) ✅')
+
+    test_two_way_threat_count()
+    print('count_n_in_a_row_threats functions correctly! (two-way threats) ✅')
+
+    test_one_way_threat_count()
+    print('count_n_in_a_row_threats functions correctly! (one-way threats) ✅')
 
