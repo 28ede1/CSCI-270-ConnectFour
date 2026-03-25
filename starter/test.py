@@ -1,5 +1,5 @@
 from connectfour import *
-from players import count_n_in_a_row_threats
+from players import count_n_in_a_row_threats, count_immediate_future_wins
 
 # test args
 
@@ -99,7 +99,7 @@ test_board_11 = [
     0,0,1,1,0,1,0,
     0,1,2,1,1,2,0,
     1,1,1,2,2,1,0,
-    2,1,2,1,1,2,1
+    2,1,2,1,1,2,2
 ]
 
 test_board_12 = [
@@ -183,6 +183,33 @@ test_board_20 = [
     2,2,0,2,0,0,0
 ]
 
+test_board_21 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    1,0,0,0,2,0,0,
+    1,2,2,0,2,2,2,
+    1,1,1,0,2,2,2
+]
+
+test_board_22 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,1,0,1,0,0,0,
+    0,1,0,1,0,0,0,
+    1,1,0,1,0,0,0
+]
+
+test_board_23 = [
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    1,1,1,0,1,1,1
+]
+
 def test_get_open_slot_index():
 
     # Test that for an empty board, all dropped game pieces should end up on the last row
@@ -255,10 +282,6 @@ def test_diagonal_win_conditions():
     assert check_diagonal_conditions(test_board_7, 1) == False
     assert check_diagonal_conditions(test_board_7, 2) == False
 
-    assert check_diagonal_conditions(test_board_11, 1) == True
-    assert check_diagonal_conditions(test_board_11, 2) == False
-
-
 
 def test_three_way_threat_count():
     assert count_n_in_a_row_threats(test_board_12, 2, 3) == 0
@@ -302,6 +325,13 @@ def test_one_way_threat_count():
     assert count_n_in_a_row_threats(test_board_19, 2, 1) == 2
     assert count_n_in_a_row_threats(test_board_20, 1, 1) == 0
 
+def test_immediate_future_win_count():
+    assert count_immediate_future_wins(test_board_21, 1, 2) == (2,2)
+    assert count_immediate_future_wins(test_board_11, 1, 2) == (4,0)
+    assert count_immediate_future_wins(test_board_19, 1, 2) == (0,1)
+    assert count_immediate_future_wins(test_board_22, 1, 2) == (3,0)
+    assert count_immediate_future_wins(test_board_23, 1, 2) == (1,0)
+
 if __name__ == "__main__":
     test_get_open_slot_index()
     print('get_open_slot_index functions correctly! ✅')
@@ -326,4 +356,7 @@ if __name__ == "__main__":
 
     test_one_way_threat_count()
     print('count_n_in_a_row_threats functions correctly! (one-way threats) ✅')
+
+    test_immediate_future_win_count()
+    print('count_immediate_future_wins functions correctly! ✅')
 

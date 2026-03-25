@@ -93,7 +93,34 @@ def evaluation_function(board, player):
     board_score += count_n_in_a_row_threats(board, player, 1) * 2
     board_score -= count_n_in_a_row_threats(board, opposing_player, 1) * 2.6
 
+    # check if a board configuration has multiple wins possible if another move is preformed
+
+    possible_immediate_future_wins, possible_immediate_future_losses = count_immediate_future_wins(board, player, opposing_player)
+    board_score += possible_immediate_future_wins * 15 if possible_immediate_future_wins >= 2 else 0
+    board_score -= possible_immediate_future_losses * 15 if possible_immediate_future_losses >= 2 else 0
+
     return board_score
+
+def count_immediate_future_wins(board, player, opposing_player):
+    possible_moves = [i for i in range(7) if board[i] == 0]
+    possible_wins = 0
+    possible_losses = 0
+    for move in possible_moves:
+        move_slot_index = get_open_slot_index(board, move)
+        play_move(board, player, move)
+
+        if check_win_conditions(board) == player:
+            possible_wins += 1
+
+        board[move_slot_index] = 0
+
+        play_move(board, opposing_player, move)
+        if check_win_conditions(board) == opposing_player:
+            possible_losses += 1
+
+        board[move_slot_index] = 0
+    return possible_wins, possible_losses
+
 
 def count_n_in_a_row_threats(board, player, threat_chain_count):
     column_start_index = 0
