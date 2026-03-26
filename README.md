@@ -5,7 +5,7 @@ Terminal implementation of ConnectFour that uses the minimax optimal decision ma
 
 ### Demo
 
-![Connect Four AI Demo](https://pasteboard.co/5vGRdFRg05wZ.png)
+![Connect Four AI Demo](images/table%201-1.png?raw=true)
 
 
 ## Features
