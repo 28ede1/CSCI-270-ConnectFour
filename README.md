@@ -44,6 +44,6 @@ play_tournament(ai_player_fn, random_player_fn, 100)
 
 ## Notable design-choices
 
-Board is represented as a 1D list (size 42)
-Moves mutate the board and must be undone during search
-Slightly higher penalty is given to opponent threats → more defensive AI in the evaluation function
+* Board is represented as a 1D list (size 42)
+* Moves mutate the board and must be undone during search
+* Slightly higher penalty is given to opponent threats → more defensive AI in the evaluation function
