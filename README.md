@@ -1,6 +1,6 @@
 # ConnectFour Minimax AI w/ Alpha Beta Pruning
 
-Terminal implementation of ConnectFour that uses the minimax optimal decision making algorithm to preform optimal moves. The Alpha-Beta pruning optimization technique do that the algorithm could explore all possible game states efficiently. 
+Terminal implementation of Connect Four that uses the minimax algorithm for optimal decision-making. Alpha-beta pruning is used to improve efficiency by reducing the number of game states explored.
 
 
 ### Demo
