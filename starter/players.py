@@ -177,8 +177,7 @@ def minimax(board, eval_fn, whose_turn, who_am_i, num_plys):
         runs minimax with alpha-beta pruning to evaluate a game state.
 
         Simulates alternating turns up to a given depth given by num_plays.
-        
-
+    
         Args:
             board (list[int]): list of board positions with 0s, 1s, 2s
             eval_fn (method): method that is used to evaluate the goodness of a state
@@ -212,7 +211,27 @@ def minimax(board, eval_fn, whose_turn, who_am_i, num_plys):
 
             board[move_slot_index] = 0
         return best_value
-    return alpha_beta_minimax(board, eval_fn, whose_turn, who_am_i, num_plys)
+    
+    best_value = float("-inf")
+    best_moves = []
+
+    valid_moves = [i for i in range(7) if board[i] == 0]
+    opposing_player = 2 if whose_turn == 1 else 1
+    
+    for move in valid_moves:
+        move_slot_index = get_open_slot_index(board, move)
+        play_move(board, whose_turn, move)
+        current_minimax_value = alpha_beta_minimax(board, eval_fn, opposing_player, who_am_i, num_plys)
+
+        if current_minimax_value == best_value:
+            best_moves.append(move)
+        elif current_minimax_value > best_value:
+            best_value = current_minimax_value
+            best_moves = [move]
+
+        board[move_slot_index] = 0
+
+    return (best_value, best_moves)
 
     
 def initialize_my_player_fn(num_plys=4):
@@ -235,21 +254,9 @@ def initialize_my_player_fn(num_plys=4):
         
         opposing_player = 2 if player == 1 else 1
 
-        best_move = None
-        best_board_score = float("-inf")
-
-        for move in valid_moves:
-            # in this implementation, the board is mutated, so you must undo each move preformed.
-            move_slot_index = get_open_slot_index(board, move)
-            play_move(board, player, move)
-
-            # each move is scored based gaurenteed outcome calculated after num_ply turns are simulated.
-            move_score = minimax(board, evaluation_function, opposing_player, player, num_plys - 1)
-            if move_score > best_board_score:
-                best_board_score = move_score
-                best_move = move
-
-            board[move_slot_index] = 0
-        return best_move
-    
+        best_value, best_moves = minimax(board, evaluation_function, player, player, num_plys)
+        if len(best_moves) == 0:
+            return None
+        else:
+            return random.choice(best_moves)
     return my_player_fn
