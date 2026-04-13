@@ -62,7 +62,7 @@ def play_move(board, player, column):
 def check_diagonal_conditions(board, player):
     """
     Given a board and a player, check each possible diagonal to see if a player
-    has 4 checkers in a diagonal (forward learning or backward learning).
+    has 4 checkers in a diagonal (forward leaning or backward leaning).
 
     Args: 
         board (list[int]): list of board positions with 0s, 1s, 2s

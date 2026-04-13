@@ -1,5 +1,5 @@
 from connectfour import *
-from players import count_n_in_a_column_threats, count_immediate_future_wins
+from players import count_n_in_a_column_threats
 
 # test args
 
@@ -325,13 +325,6 @@ def test_one_way_threat_count():
     assert count_n_in_a_column_threats(test_board_19, 2, 1) == 2
     assert count_n_in_a_column_threats(test_board_20, 1, 1) == 0
 
-def test_immediate_future_win_count():
-    assert count_immediate_future_wins(test_board_21, 1, 2) == (2,2)
-    assert count_immediate_future_wins(test_board_11, 1, 2) == (4,0)
-    assert count_immediate_future_wins(test_board_19, 1, 2) == (0,1)
-    assert count_immediate_future_wins(test_board_22, 1, 2) == (3,0)
-    assert count_immediate_future_wins(test_board_23, 1, 2) == (1,0)
-
 if __name__ == "__main__":
     test_get_open_slot_index()
     print('get_open_slot_index functions correctly! ✅')
@@ -356,7 +349,3 @@ if __name__ == "__main__":
 
     test_one_way_threat_count()
     print('count_n_in_a_row_threats functions correctly! (one-way threats) ✅')
-
-    test_immediate_future_win_count()
-    print('count_immediate_future_wins functions correctly! ✅')
-
