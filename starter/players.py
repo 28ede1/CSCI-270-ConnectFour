@@ -25,7 +25,8 @@ def human_player_fn(board, player):
         return None
     
     move = input("Enter column (0-6): ")
-
+    
+    # handles edge case user input
     try: 
         move = int(move)
     except:
@@ -55,16 +56,16 @@ def evaluation_function(board, player):
     board_is_full = 0 not in {board[i] for i in range(7)} # assumes gravity rules for dropping game pieces are obeyed
     opposing_player = 2 if player == 1 else 1
     if game_win_result == player:
-        return 1000000000
+        return 10000000000
     elif game_win_result != 0:
-        return -1000000000
+        return -10000000000
     elif board_is_full:
         return 0
         
     board_score = 0
 
-    # # consider center column advantage (more possible ways to get 4 in a row available). 
-    # # positive center_count value indicates player has center advantage, negative means opponent has advantage
+    # consider center column advantage (more possible ways to get 4 in a row available). 
+    # positive center_count value indicates player has center advantage, negative means opponent has advantage
 
     center_count = 0
     center_index = 38
@@ -77,21 +78,20 @@ def evaluation_function(board, player):
 
     board_score += center_count * 5
 
-    # consider the number of columns where you have 3 of the same color as player in a column
-    # a stronger weighting againt player is used so that the AI can be more 'defensively'
-    # as in, care more about preventing states where the opposing player has n in row in a column
+    # consider the number of columns where you have 3, 2, or just 1 of the same color in column, seperately
+    # add negative weightings for the opposing player to get the ai to play more defensively
     board_score += count_n_in_a_column_threats(board, player, 3) * 8
-    board_score -= count_n_in_a_column_threats(board, opposing_player, 3) * 8
+    board_score -= count_n_in_a_column_threats(board, opposing_player, 3) * 8.4
 
     # consider the number of columns where you have 2 in a column (less threatening then 3 in a row)
 
     board_score += count_n_in_a_column_threats(board, player, 2) * 4
-    board_score -= count_n_in_a_column_threats(board, opposing_player, 2) * 4
+    board_score -= count_n_in_a_column_threats(board, opposing_player, 2) * 4.4
 
     # consider just having 1 in a row (even less threatening)
 
     board_score += count_n_in_a_column_threats(board, player, 1) * 2
-    board_score -= count_n_in_a_column_threats(board, opposing_player, 1) * 2
+    board_score -= count_n_in_a_column_threats(board, opposing_player, 1) * 2.4
     return board_score
 
 def count_n_in_a_column_threats(board, player, target_chain_length):
@@ -112,14 +112,17 @@ def count_n_in_a_column_threats(board, player, target_chain_length):
     for i in range(7):
         current_index = column_start_index
 
+        # skip full columns 
         if board[current_index] != 0:
             column_start_index += 1
             continue
-
+        
+        # once a non-full column is found, go the the topmost piece that is not 0
         chain_count = 0
         while current_index <= 41 and board[current_index] == 0:
             current_index += 7
 
+        # keep counting if you have several game pieces of the same color in a column
         while current_index <= 41 and board[current_index] == player:
             chain_count += 1
             current_index += 7
@@ -158,9 +161,11 @@ def minimax(board, eval_fn, whose_turn, who_am_i, num_plys):
             if alpha >= beta:
                 return best_value
             
-            move_slot_index = get_open_slot_index(board, move)
-            play_move(board, whose_turn, move)
-            child_value = alpha_beta_minimax(board, eval_fn, opposing_player, who_am_i, num_plys - 1, alpha, beta)
+            # create board copy to prevent child nodes using mutated parent boards
+            new_board = board.copy()
+            play_move(new_board, whose_turn, move)
+
+            child_value = alpha_beta_minimax(new_board, eval_fn, opposing_player, who_am_i, num_plys - 1, alpha, beta)
             
             if whose_turn == who_am_i:
                 best_value = max(best_value, child_value)
@@ -169,7 +174,6 @@ def minimax(board, eval_fn, whose_turn, who_am_i, num_plys):
                 best_value = min(best_value, child_value)
                 beta = min(beta, child_value)
 
-            board[move_slot_index] = 0
         return best_value
     
     best_value = float("-inf")
@@ -179,17 +183,17 @@ def minimax(board, eval_fn, whose_turn, who_am_i, num_plys):
     opposing_player = 2 if whose_turn == 1 else 1
     
     for move in valid_moves:
-        move_slot_index = get_open_slot_index(board, move)
-        play_move(board, whose_turn, move)
-        current_minimax_value = alpha_beta_minimax(board, eval_fn, opposing_player, who_am_i, num_plys)
+         
+        # create board copy to prevent child nodes using mutated parent boards
+        new_board = board.copy()
+        play_move(new_board, whose_turn, move)
+        current_minimax_value = alpha_beta_minimax(new_board, eval_fn, opposing_player, who_am_i, num_plys)
 
         if current_minimax_value == best_value:
             best_moves.append(move)
         elif current_minimax_value > best_value:
             best_value = current_minimax_value
             best_moves = [move]
-
-        board[move_slot_index] = 0
 
     return (best_value, best_moves)
 
@@ -211,8 +215,6 @@ def initialize_my_player_fn(num_plys=4):
         valid_moves = [i for i in range(num_cols) if board[i] == 0]
         if len(valid_moves) == 0:
             return None
-        
-        opposing_player = 2 if player == 1 else 1
 
         best_value, best_moves = minimax(board, evaluation_function, player, player, num_plys)
         if len(best_moves) == 0:
