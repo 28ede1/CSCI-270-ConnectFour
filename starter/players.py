@@ -187,7 +187,7 @@ def minimax(board, eval_fn, whose_turn, who_am_i, num_plys):
         # create board copy to prevent child nodes using mutated parent boards
         new_board = board.copy()
         play_move(new_board, whose_turn, move)
-        current_minimax_value = alpha_beta_minimax(new_board, eval_fn, opposing_player, who_am_i, num_plys)
+        current_minimax_value = alpha_beta_minimax(new_board, eval_fn, opposing_player, who_am_i, num_plys - 1)
 
         if current_minimax_value == best_value:
             best_moves.append(move)
