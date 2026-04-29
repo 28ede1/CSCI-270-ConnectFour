@@ -5,9 +5,6 @@ Terminal implementation of Connect Four that uses the minimax algorithm for opti
 
 ### Demo
 
-![Connect Four AI Demo](game_thumbnail.png)
-
-
 ## Features
 
 - Minimax algorithm with alpha-beta pruning for optimal decision making
