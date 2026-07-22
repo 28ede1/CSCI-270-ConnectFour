@@ -1,0 +1,30 @@
+:root { --cell: 64px; }
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #0f172a; color: #e2e8f0;
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 100vh; margin: 0; padding: 24px;
+}
+h1 { margin: 0 0 4px; font-size: 1.6rem; }
+.subtitle { color: #94a3b8; margin: 0 0 20px; font-size: .9rem; }
+.controls { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+select, button {
+  background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+  border-radius: 8px; padding: 8px 14px; font-size: .9rem; cursor: pointer;
+}
+button:hover, select:hover { border-color: #475569; }
+#status { min-height: 24px; margin-bottom: 12px; font-weight: 600; }
+.board {
+  display: grid; grid-template-columns: repeat(7, var(--cell));
+  gap: 6px; background: #1d4ed8; padding: 10px; border-radius: 12px;
+}
+.cell {
+  width: var(--cell); height: var(--cell); border-radius: 50%;
+  background: #0f172a; cursor: pointer; transition: transform .08s, background .15s;
+}
+.cell:hover { transform: scale(1.05); }
+.cell.p1 { background: #ef4444; }   /* human = red */
+.cell.p2 { background: #eab308; }   /* AI = yellow */
+.board.locked .cell { cursor: default; }
+.board.locked .cell:hover { transform: none; }
