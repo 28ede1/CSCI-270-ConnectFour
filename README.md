@@ -66,6 +66,15 @@ python3 -m uvicorn app:app --reload
 Then open <http://127.0.0.1:8000>. Difficulty (easy/medium/hard) maps to
 minimax search depth.
 
+### Deployment (Railway)
+
+The web version deploys to [Railway](https://railway.app) using the included
+`starter/Procfile`. Because the app lives in `starter/` rather than the repo
+root, you **must** set the service's **Root Directory** to `starter` (Settings →
+Source → Root Directory) — otherwise the builder scans the root, finds no Python
+files, and fails to detect the app. The Procfile already binds to `$PORT`, so no
+code changes are needed.
+
 ## Notable design choices
 
 * Board is represented as a 1D list of size 42 (index = `row * 7 + col`)
