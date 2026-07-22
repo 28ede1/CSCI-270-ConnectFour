@@ -7,92 +7,26 @@
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-  <h1>Connect Four</h1>
-  <p class="subtitle">You are <b style="color:#ef4444">red</b>. The minimax AI is <b style="color:#eab308">yellow</b>. Click a column to drop.</p>
-
-  <div class="controls">
-    <label>Difficulty:
-      <select id="difficulty">
-        <option value="easy">Easy</option>
-        <option value="medium" selected>Medium</option>
-        <option value="hard">Hard</option>
-      </select>
-    </label>
-    <button id="reset">New Game</button>
+  <h1>CONNECT FOUR</h1>
+  <!-- LED score readout -->
+  <div class="readout">
+    <div class="score you"><span class="label">YOU</span><span class="num" id="scoreYou">00</span></div>
+    <span class="vs">VS</span>
+    <div class="score cpu"><span class="label">CPU</span><span class="num" id="scoreCpu">00</span></div>
   </div>
 
-  <div id="status">Your turn.</div>
-  <div class="board" id="board"></div>
+  <div class="controls">
+    <div class="seg" id="difficulty" role="group" aria-label="Difficulty">
+      <button type="button" data-value="easy">EASY</button>
+      <button type="button" data-value="medium" aria-pressed="true">MED</button>
+      <button type="button" data-value="hard">HARD</button>
+    </div>
+    <button id="reset" type="button">NEW GAME</button>
+  </div>
 
-  <script>
-    // The board is a 42-element list, exactly like the Python terminal version.
-    // Index = row * 7 + col. 0 = empty, 1 = human, 2 = AI.
-    let board = Array(42).fill(0);
-    let locked = false;  // prevents clicks while the AI is thinking or game is over
+  <div id="status">INSERT DISC</div>
+  <div class="board" id="board" aria-label="Connect Four board"></div>
 
-    const boardEl = document.getElementById("board");
-    const statusEl = document.getElementById("status");
-    const difficultyEl = document.getElementById("difficulty");
-
-    // Build the 42 clickable cells once.
-    for (let i = 0; i < 42; i++) {
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      cell.dataset.col = i % 7;         // clicking any cell drops in that column
-      cell.addEventListener("click", () => onColumnClick(Number(cell.dataset.col)));
-      boardEl.appendChild(cell);
-    }
-
-    function render() {
-      const cells = boardEl.children;
-      for (let i = 0; i < 42; i++) {
-        cells[i].className = "cell" + (board[i] === 1 ? " p1" : board[i] === 2 ? " p2" : "");
-      }
-      boardEl.classList.toggle("locked", locked);
-    }
-
-    function setStatus(winner, gameOver) {
-      if (winner === 1) { statusEl.textContent = "🎉 You win!"; locked = true; }
-      else if (winner === 2) { statusEl.textContent = "🤖 The AI wins."; locked = true; }
-      else if (gameOver) { statusEl.textContent = "It's a draw."; locked = true; }
-      else { statusEl.textContent = "Your turn."; }
-    }
-
-    async function onColumnClick(col) {
-      if (locked) return;
-      if (board[col] !== 0) return;   // column full
-
-      locked = true;
-      statusEl.textContent = "AI is thinking...";
-
-      try {
-        // This is the fetch → API → response cycle, same as in a PERN app.
-        const res = await fetch("/api/move", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ board, column: col, difficulty: difficultyEl.value }),
-        });
-        if (!res.ok) throw new Error((await res.json()).detail || "Request failed");
-
-        const data = await res.json();  // { board, winner, game_over }
-        board = data.board;
-        render();
-        setStatus(data.winner, data.game_over);
-        if (!data.game_over) locked = false;
-      } catch (err) {
-        statusEl.textContent = "Error: " + err.message;
-        locked = false;
-      }
-    }
-
-    document.getElementById("reset").addEventListener("click", () => {
-      board = Array(42).fill(0);
-      locked = false;
-      render();
-      statusEl.textContent = "Your turn.";
-    });
-
-    render();
-  </script>
+  <script src="/static/game.js"></script>
 </body>
 </html>
