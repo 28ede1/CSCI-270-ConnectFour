@@ -124,18 +124,23 @@ async function onColumnClick(col) {
 difficultyEl.addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-value]");
   if (!btn) return;
+  if (btn.dataset.value === difficulty) return;   // no change, keep the board
   difficulty = btn.dataset.value;
   for (const b of difficultyEl.children) {
     b.setAttribute("aria-pressed", String(b === btn));
   }
+  resetGame();   // changing mode starts a fresh game
 });
 
-document.getElementById("reset").addEventListener("click", () => {
+document.getElementById("reset").addEventListener("click", resetGame);
+
+// Clear the board back to a fresh game.
+function resetGame() {
   board = Array(42).fill(0);
   locked = false;
   render();
   statusEl.className = "";
   statusEl.textContent = "INSERT DISC";
-});
+}
 
 render();
