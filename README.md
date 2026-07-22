@@ -1,9 +1,10 @@
-# ConnectFour Minimax AI w/ Alpha Beta Pruning
+# ConnectFour Minimax AI w/ Alpha-Beta Pruning
 
-Terminal implementation of Connect Four that uses the minimax algorithm for optimal decision-making. Alpha-beta pruning is used to improve efficiency by reducing the number of game states explored.
-
+A Connect Four AI that uses the minimax algorithm for optimal decision-making. Alpha-beta pruning improves efficiency by reducing the number of game states explored. Playable in the terminal, with an optional web version.
 
 ### Demo
+
+<!-- TODO: add a screenshot or GIF of a game in progress -->
 
 ## Features
 
@@ -15,32 +16,58 @@ Terminal implementation of Connect Four that uses the minimax algorithm for opti
 
 ## Project Structure
 
-- **play.py**: Handles game execution and simulation between two player functions. Supports both interactive play (human vs AI) and automated tournaments for evaluating player performance over multiple rounds.
+All source files live in the `starter/` directory.
 
-- **players.py**: Contains all player implementations, including the minimax-based AI (with alpha-beta pruning), a random player for baseline comparison, and a human player that takes terminal input for interactive testing. Also includes the evaluation function and helper methods used to score board states.
+- **connectfour.py**: Core Connect Four mechanics — board representation, move execution, and win-condition checks (rows, columns, diagonals). Also provides helpers for determining valid moves and whether the game has ended.
+- **players.py**: All player implementations — the minimax AI (with alpha-beta pruning), a random baseline player, and a human player that takes terminal input. Also contains the evaluation function and scoring helpers.
+- **play.py**: Game execution — interactive play (human vs AI) and automated tournaments for benchmarking players over many rounds.
+- **test.py**: Unit tests for core game logic and helpers (move placement, win detection, evaluation utilities).
 
-- **connectfour.py**: Implements the core Connect Four game mechanics, including board representation, move execution, and win condition checks (rows, columns, and diagonals). Also provides helper functions for determining valid moves and checking whether the game has ended.
- 
-- **test.py**: Contains unit tests for validating core game logic and helper functions, including move placement, win detection, and evaluation-related utilities.
+## Running the terminal game
 
-## To run
+```bash
+cd starter
+python3 play.py
+```
 
-Run the game:
-python play.py
+Choose different player types inside `play.py`:
+- `initialize_my_player_fn()` — minimax AI
+- `random_player_fn` — random baseline
+- `human_player_fn` — terminal input
 
-You can choose different player types inside play.py:
-- ai_player_fn (minimax AI)
-- random_player_fn
-- human_player_fn (terminal input)
-
-Play a single game:
+```python
+# Play a single game (human vs AI)
 play_game(human_player_fn, ai_player_fn)
 
-Run a tournament (AI vs random):
+# Run a tournament (AI vs random, 100 rounds)
 play_tournament(ai_player_fn, random_player_fn, 100)
+```
 
-## Notable design-choices
+Run the tests:
 
-* Board is represented as a 1D list (size 42)
-* Moves mutate the board and must be undone during search
-* Slightly higher penalty is given to opponent threats → more defensive AI in the evaluation function
+```bash
+cd starter
+python3 test.py
+```
+
+## Web version
+
+An optional browser-based version wraps the same game logic and AI in a small
+[FastAPI](https://fastapi.tiangolo.com/) server with an HTML/JS board — a work
+in progress for learning web deployment. The game engine and minimax AI are
+unchanged; the web layer only adds a thin API and frontend on top.
+
+```bash
+cd starter
+python3 -m pip install -r requirements.txt
+python3 -m uvicorn app:app --reload
+```
+
+Then open <http://127.0.0.1:8000>. Difficulty (easy/medium/hard) maps to
+minimax search depth.
+
+## Notable design choices
+
+* Board is represented as a 1D list of size 42 (index = `row * 7 + col`)
+* During search, each candidate move is applied to a copy of the board to avoid mutating shared state across branches
+* Opponent threats are penalized slightly more than the AI's own threats are rewarded → a more defensive AI
