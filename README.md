@@ -2,6 +2,8 @@
 
 A Connect Four AI that uses the minimax algorithm for optimal decision-making. Alpha-beta pruning improves efficiency by reducing the number of game states explored. Playable in the terminal, with an optional web version.
 
+**Deployed Link** <https://connectfour-ai-production.up.railway.app/>
+
 ### Demo
 
 <!-- TODO: add a screenshot or GIF of a game in progress -->
