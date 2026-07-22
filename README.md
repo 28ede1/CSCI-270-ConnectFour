@@ -4,8 +4,6 @@ A Connect Four AI that uses the minimax algorithm for optimal decision-making. A
 
 **Deployed Link** <https://connectfour-ai-production.up.railway.app/>
 
-### Demo
-
 <!-- TODO: add a screenshot or GIF of a game in progress -->
 
 ## Features
