@@ -4,15 +4,11 @@ A Connect Four AI that uses the minimax algorithm for optimal decision-making. A
 
 **Deployed Link** <https://connectfour-ai-production.up.railway.app/>
 
-<!-- TODO: add a screenshot or GIF of a game in progress -->
-
 ## Features
 
 - Minimax algorithm with alpha-beta pruning for optimal decision making
 - Custom evaluation function (offensive + defensive heuristics)
-- Random player (baseline)
-- Human player (terminal input)
-- Tournament simulation for benchmarking AI performance
+- Frontend - Backend implementation (Python, FastAPI, JavaScript, HTML, CSS)
 
 ## Project Structure
 
